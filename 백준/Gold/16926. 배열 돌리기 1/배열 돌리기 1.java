@@ -71,11 +71,13 @@ public class Main {
                 array[j][left]=arrlist[(index++ + rotate)%len];
             }
         }
+        StringBuilder sb=new StringBuilder();
         for(int y = 0; y <N; y++){
             for(int x = 0; x <M; x++){
-                System.out.print(array[y][x]+" ");
+                sb.append(array[y][x]+" ");
             }
-            System.out.println();
+            sb.append("\n");
         }
+        System.out.println(sb);
     }
 }
