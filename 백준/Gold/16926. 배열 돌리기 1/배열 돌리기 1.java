@@ -1,8 +1,9 @@
+
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 public class Main {
@@ -19,42 +20,55 @@ public class Main {
                 array[i][j]=Integer.parseInt(input[j]);
             }
         }
-        int[][] Rarray=new int[N][M];
+        //int[][] Rarray=new int[N][M];
         int layersize=Math.min(M,N)/2;
         for(int repeat=0;repeat<layersize;repeat++){
-            ArrayList<Integer> list=new ArrayList<>();
+            //ArrayList<Integer> list=new ArrayList<>();
+
             int top=repeat;
             int left=repeat;
             int bottom=N-repeat-1;
             int right=M-repeat-1;
+            int len=2*(bottom-top+right-left);
+            int[] arrlist=new int[len];
+            int index=0;
             for(int j=left;j<=right;j++){
-                list.add(array[top][j]);
+                //list.add(array[top][j]);
+                arrlist[index++]=array[top][j];
             }
             for(int j=top+1;j<=bottom-1;j++){
-                list.add(array[j][right]);
+                //list.add(array[j][right]);
+                arrlist[index++]=array[j][right];
             }
             for(int j=right;j>=left;j--){
-                list.add(array[bottom][j]);
+                //list.add(array[bottom][j]);
+                arrlist[index++]=array[bottom][j];
             }
             for(int j=bottom-1;j>=top+1;j--){
-                list.add(array[j][left]);
+                //list.add(array[j][left]);
+                arrlist[index++]=array[j][left];
             }
-            int len=list.size();
+//            int len=list.size();
             int rotate=R%len;
-            Collections.rotate(list,-rotate);
+//            Collections.rotate(list,-rotate);
+            index=0;
 
             int idx=0;
             for(int j=left;j<=right;j++){
-                array[top][j]=list.get(idx++);
+                //array[top][j]=list.get(idx++);
+                array[top][j]=arrlist[(index++ + rotate)%len];
             }
             for(int j=top+1;j<=bottom-1;j++){
-                array[j][right]=list.get(idx++);
+                //array[j][right]=list.get(idx++);
+                array[j][right]=arrlist[(index++ + rotate)%len];
             }
             for(int j=right;j>=left;j--){
-                array[bottom][j]=list.get(idx++);
+                //array[bottom][j]=list.get(idx++);
+                array[bottom][j]=arrlist[(index++ + rotate)%len];
             }
             for(int j=bottom-1;j>=top+1;j--){
-                array[j][left]=list.get(idx++);
+                //array[j][left]=list.get(idx++);
+                array[j][left]=arrlist[(index++ + rotate)%len];
             }
         }
         for(int y = 0; y <N; y++){
