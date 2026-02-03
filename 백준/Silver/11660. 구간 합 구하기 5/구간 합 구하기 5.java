@@ -19,6 +19,7 @@ public class Main {
                 sum[i][j]=Integer.parseInt(st.nextToken())+sum[i][j-1]+sum[i-1][j]-sum[i-1][j-1];
             }
         }
+        StringBuilder sb=new StringBuilder();
         for (int i = 0; i < M; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             //int[] dot= new int[4];
@@ -27,8 +28,9 @@ public class Main {
             int secondx= Integer.parseInt(st.nextToken());
             int secondy= Integer.parseInt(st.nextToken());
 
-            System.out.println(sum[secondx][secondy]-sum[secondx][firsty-1]-sum[firstx-1][secondy]+sum[firstx-1][firsty-1]);
+            sb.append(sum[secondx][secondy]-sum[secondx][firsty-1]-sum[firstx-1][secondy]+sum[firstx-1][firsty-1]+"\n");
 
         }
+        System.out.println(sb);
     }
 }
