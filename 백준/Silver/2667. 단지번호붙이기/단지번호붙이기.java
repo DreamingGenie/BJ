@@ -1,19 +1,26 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
+    static int N;
+    static int[][] map;
+    static int[] dx={-1,0,1,0};
+    static int[] dy={0,-1,0,1};
+
     public static void main(String[] args) throws IOException {
-        //dfssolve();
-        bfssolve();
+        dfssolve();
+        //bfssolve();
     }
     public static void bfssolve() throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        int[][] map=new int[N][N];
+        N = Integer.parseInt(br.readLine());
+        map=new int[N][N];
         boolean[][] visited=new boolean[N][N];
         Queue<int[]> queue=new LinkedList<>();
+
         for (int i = 0; i < N; i++) {
             String input=br.readLine();
             for (int j = 0; j < N; j++) {
@@ -21,8 +28,6 @@ public class Main {
             }
         }
         List<Integer> list=new ArrayList<>();
-        int[] dx={-1,0,1,0};
-        int[] dy={0,-1,0,1};
 
         for (int y = 0; y < N; y++) {
             for (int x = 0; x < N; x++) {
@@ -53,40 +58,43 @@ public class Main {
     }
     public static void dfssolve() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        int[][] map=new int[N][N];
-        boolean[][] visited=new boolean[N][N];
+        N = Integer.parseInt(br.readLine());
+        map=new int[N][N];
+        //boolean[][] visited=new boolean[N][N];
         for (int i = 0; i < N; i++) {
             String input=br.readLine();
             for (int j = 0; j < N; j++) {
-                map[i][j]=Integer.parseInt(input.charAt(j)+"");
+                map[i][j] = input.charAt(j) - '0';
             }
         }
 
         List<Integer> list=new ArrayList<>();
         for (int y = 0; y < N; y++) {
             for (int x = 0; x < N; x++) {
-                if (!visited[y][x] &&map[y][x]==1) {
-                    int count=1;
-                    list.add(dfs(map,visited,x,y,N,count));
+                if (map[y][x]==1) {
+                    list.add(dfs(x,y));
                 }
             }
 
         }
-        System.out.println(list.size());
-        list.stream().sorted().forEach(System.out::println);
+        Collections.sort(list);
+        StringBuilder sb = new StringBuilder();
+        sb.append(list.size()).append('\n');
+        for (int cnt : list) {
+            sb.append(cnt).append('\n');
+        }
+        System.out.print(sb);
 
     }
-    public static int dfs(int[][] map,boolean[][] visited,int x,int y,int N,int count){
-        visited[y][x]=true;
-        int[] dx={-1,0,1,0};
-        int[] dy={0,-1,0,1};
+    public static int dfs(int x,int y){
+        map[y][x]=0;
+        int count=1;
         for(int i=0;i<4;i++){
             int nx=x+dx[i];
             int ny=y+dy[i];
             if(nx>=0&&nx<N&&ny>=0&&ny<N){
-                if(!visited[ny][nx]&&map[ny][nx]==1){
-                    count=dfs(map,visited,nx,ny,N,count+1);
+                if(map[ny][nx]==1){
+                    count+=dfs(nx,ny);
                 }
             }
         }
