@@ -1,4 +1,5 @@
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -45,20 +46,22 @@ public class Main {
 			*/
 
 		}
+		StringBuilder sb= new StringBuilder();
 		int findx=0;
 		int findy=0;
 		for(int i=0;i<N;i++) {
 			for(int j=0;j<N;j++) {
 //				if(arr[i][j]<10)
 //					System.out.print(" ");
-				System.out.print(arr[i][j]+" ");
+				sb.append(arr[i][j]+" ");
 				if(arr[i][j]==find) {
 					findx=j+1;
 					findy=i+1;
 				}
 			}
-			System.out.println();
+			sb.append("\n");
 		}
+		System.out.print(sb);
 		System.out.println(findy+" "+findx);
 	}
 
