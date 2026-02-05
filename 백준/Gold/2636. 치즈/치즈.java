@@ -1,5 +1,3 @@
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,16 +11,16 @@ public class Main {
     //static boolean[][] visited;
     static int[] dx={0,0,-1,1};
     static int[] dy={1,-1,0,0};
-    static int now=0;
+    static int cheezeCount =0;
     public static void main(String[] args) throws IOException {
         input();
         int time=0;
         int before=0;
-        while(now!=0){
+        while(cheezeCount !=0){
             //System.out.println(now+" "+before);
-            bfs();
-            before=now;
-            now=countCheeze();
+            before= cheezeCount;
+            cheezeCount-=bfs();
+            //cheezeCount =countCheeze();
             time++;
         }
         System.out.println(time);
@@ -40,13 +38,14 @@ public class Main {
             for(int j = 0; j< X; j++){
                 map[i][j]=Integer.parseInt(input[j]);
                 if(map[i][j]==1)
-                    now++;
+                    cheezeCount++;
 
             }
         }
     }
-    public static void bfs(){
+    public static int bfs(){
         Queue<Dot> now=new LinkedList<>();
+        int eraseCount=0;
         //Queue<Dot> next=new LinkedList<>();
         boolean visited[][]=new boolean[Y][X];
         visited[0][0]=true;
@@ -61,13 +60,15 @@ public class Main {
                     visited[ny][nx]=true;
                     if(map[ny][nx]==0)
                         now.add(new Dot(nx,ny));
-                    else
-                        map[ny][nx]=0;
+                    else {
+                        map[ny][nx] = 0;
+                        eraseCount++;
+                    }
                     //next.add(new Dot(nx,ny));
                 }
             }
         }
-        //return X*Y-next.size();
+        return eraseCount;
     }
     public static boolean isValid(int x,int y){
         return x >= 0 && x < X && y >= 0 && y < Y;
