@@ -2,47 +2,49 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class Main {
-    static int N;
-    static boolean[][] board;
-    static int[] visited;
-    static int answer=0;
-    public static void main(String[] args) throws IOException {
-        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-        N=Integer.parseInt(br.readLine());
-        board=new boolean[N][N];
-        visited=new int[N];
-        //Arrays.fill(visited,-1);
-        search(0);
-        System.out.println(answer);
-    }
-    public static void search(int index){
+	
+	static int n;
+	static boolean[] c;
+	static boolean[] bslash;
+	static boolean[] slash;
+	static int cnt;
+	public static void main(String[] args) throws IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		n = Integer.parseInt(br.readLine());
+		cnt = 0;
+		c = new boolean[n];
+		bslash = new boolean[2*(n-1)+1];
+		slash = new boolean[2*(n-1)+1];
+		
+		
+		dfs(0);
+		System.out.println(cnt);
+		
+		
+	}
+	private static void dfs(int k) {
+		if (k==n) {
+			cnt++;
+			return;
+		}
+		
+		for(int i=0; i<n; i++) {
+			if(!c[i] && !bslash[k+i] && !slash[(n-1+k-i)]) {
+				c[i] = true;
+				bslash[i+k] = true;
+				slash[(n-1)+k-i] = true;
+				dfs(k+1);
+				slash[(n-1)+k-i] = false;
+				bslash[i+k] = false;
+				c[i] =false;
+				
+			}
+		}
+		
+	}
 
-        if(index==N){
-            answer++;
-            return;
-        }
-        for(int i=0;i<N;i++){
-            visited[index]=i;
-            //System.out.println(isPossible(i,index));
-            if(isPossible(i,index)){
-                //System.out.println(index);
-                //answer++;
-                search(index+1);
-                //visited[index]=-1;
-            }
-        }
-    }
-    public static boolean isPossible(int x, int y){
-        for(int i=0;i<y;i++){
-            if(visited[i]==x)
-                return false;
-            if(Math.abs(visited[i]-x)==Math.abs(i-y)){
-                return false;
-            }
-        }
-        return true;
-    }
 }
