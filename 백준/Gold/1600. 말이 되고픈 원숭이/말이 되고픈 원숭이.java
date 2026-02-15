@@ -1,88 +1,76 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-	
-	static int K,m,n;
-	static int[][] arr;
-	static int[] dx = {0,1,0,-1};
-	static int[] dy = {1,0,-1,0};
-	static int[] hdx = {-1, -2, -1,-2, 1, 2, 1, 2};
-	static int[] hdy = {2, 1, -2, -1, 2, 1, -2,-1};
-	static Queue<int[]> q = new LinkedList<>();
-	static int[][][] visited;
-	static int ans;
-	public static void main(String[] args) throws IOException {
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		K = Integer.parseInt(br.readLine());
-		
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		m = Integer.parseInt(st.nextToken());
-		n = Integer.parseInt(st.nextToken());
-		visited = new int[n][m][K+1];
-		arr = new int[n][m];
-		
-		for(int i = 0; i<n; i++) {
-			st = new StringTokenizer(br.readLine());
-			for(int j = 0; j<m; j++) {
-				arr[i][j] = Integer.parseInt(st.nextToken());
-			}
-		}
-		
-		q.offer(new int[] {0,0,0,0});
-		visited[0][0][0] = 1;
-		ans = bfs();
-		System.out.println(ans);
-		
-		
-		//말이동은 장애물 상관 없음
-		//원이동은 4방 장애물 안됨 
-		//k번을 쓰냐마냐 
-		
+	static int k;
+	static int w;
+	static int h;
+	static int map[][];
+	static int answer=0;
+    static int[] dx={0,0,1,-1};
+    static int[] dy={1,-1,0,0};
+    static int[] jx={-2,-2,-1,-1,1,1,2,2};
+    static int[] jy={1,-1,2,-2,2,-2,1,-1};
+	public static void main(String[] args) throws Exception{
+		input();
+		solve();
 	}
-	private static int bfs() {
-		while (!q.isEmpty()) {
-			int cur[] = q.poll();
-			int x = cur[0];
-			int y = cur[1];
-			int horse = cur[2];
-			int dist = cur[3];
-			
-			if(x == n-1 && y == m-1) {
-				return dist;
-			}
-			
-			int nx,ny;
-			
-			for(int i = 0; i <4; i++) { //원이동
-				nx = x + dx[i];
-				ny = y + dy[i];
-				if(0<=nx && nx<n && 0<=ny && ny<m && visited[nx][ny][horse] == 0 && arr[nx][ny] == 0) {
-					q.offer(new int[] {nx,ny,horse,dist+1});
-					visited[nx][ny][horse] = 1;
-				}
-				
-			}
-			if(horse < K) {
-				for(int j = 0; j<8; j++) { //말이동
-					nx = x + hdx[j];
-					ny = y + hdy[j];
-					if(0<=nx && nx<n && 0<=ny && ny<m && visited[nx][ny][horse+1] == 0 && arr[nx][ny] == 0) {
-						q.offer(new int[] {nx,ny,horse+1,dist+1});
-						visited[nx][ny][horse+1] = 1;
-					}
-				}
-			}
-			
-		}
-		
-		return -1;	
-	}
-	
+    public static void solve(){
+        Queue<int[]> queue=new LinkedList<>();
+        queue.offer(new int[] {0,0,k,0});
+        boolean[][][] visited=new boolean[h][w][k+1];
+        visited[0][0][k]=true;
+        while(!queue.isEmpty()){
+            int[] temp=queue.poll();
+            int x=temp[0];
+            int y=temp[1];
+            int z=temp[2];
+            int distance=temp[3];
+            //System.out.println(temp[0]+" "+temp[1]);
+            if(temp[0]==w-1&&temp[1]==h-1){
+                System.out.println(temp[3]);
+                return;
+            }
+            if(temp[2]>0){
+                for(int d=0;d<8;d++){
+                    x=temp[0]+jx[d];
+                    y=temp[1]+jy[d];
 
+                    if(isValid(x,y)&&map[y][x]==0&&!visited[y][x][z-1]){
+                        queue.offer(new int[] {x,y,z-1,distance+1});
+                        visited[y][x][z-1]=true;
+                    }
+                }
+            }
+            for(int d=0;d<4;d++){
+                x=temp[0]+dx[d];
+                y=temp[1]+dy[d];
+                if(isValid(x,y)&&map[y][x]==0&&!visited[y][x][z]){
+                    queue.offer(new int[] {x,y,z,distance+1});
+                    visited[y][x][z]=true;
+                }
+            }
+        }
+        System.out.println(-1);
+    }
+
+	public static void input() throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		k=Integer.parseInt(br.readLine());
+        String[] input=br.readLine().split(" ");
+        w=Integer.parseInt(input[0]);
+        h=Integer.parseInt(input[1]);
+        map=new int[h][w];
+		for(int i=0;i<h;i++) {
+            input=br.readLine().split(" ");
+			for(int j=0;j<w;j++) {
+				map[i][j]=Integer.parseInt(input[j]);
+			}
+		}
+	}
+	public static boolean isValid(int x, int y) {
+		return x >= 0 && x < w && y >= 0 && y < h;
+	}
 }
+
+
