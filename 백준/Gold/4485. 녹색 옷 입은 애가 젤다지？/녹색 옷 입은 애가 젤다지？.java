@@ -1,77 +1,79 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.StringTokenizer;
+
+
+import java.io.*;
+import java.util.*;
 
 public class Main {
-	static int n;
-	static int[][] arr;
-	static int[][] move;
-	static Queue<int[]> q;
-	static int[] dx = {1,0,-1,0};
-	static int[] dy = {0,1,0,-1};
-	static int cost;
-	static int t;
+    static int N;
+    static int[][] map;
+    static int min=Integer.MAX_VALUE;
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static int[][] dist;
+    public static void main(String[] args) throws Exception{
+        int i=1;
+        while(input()){
+            escape();
+            System.out.println("Problem "+i+": "+dist[N-1][N-1]);
+            i++;
+        }
+    }
+    public static boolean input() throws Exception{
+        N=Integer.parseInt(br.readLine());
+        if(N==0)return false;
+        map=new int[N][N];
+        dist=new int[N][N];
+        min=Integer.MAX_VALUE;
+        for(int i=0;i<N;i++) {
+            StringTokenizer st=new StringTokenizer(br.readLine());
+            for(int j=0;j<N;j++) {
+                map[i][j]=(Integer.parseInt(st.nextToken()));
+            }
+        }
+        return true;
+    }
+    static void escape(){
+        PriorityQueue<Node> pq=new PriorityQueue<>();
+        for(int[] r : dist) Arrays.fill(r, Integer.MAX_VALUE);
+        pq.offer(new Node(0,0,map[0][0]));
+        dist[0][0]=map[0][0];
+        while(!pq.isEmpty()){
+            Node curr=pq.poll();
+            int x=curr.x;
+            int y=curr.y;
+            if(dist[y][x]<curr.value)
+                continue;
+            if(x==N-1&&y==N-1){
+                return;
+            }
+            for(int d=0;d<4;d++){
+                int nx=x+dx[d];
+                int ny=y+dy[d];
+                if(!isValid(nx,ny)){continue;}
+                if(dist[ny][nx]>curr.value+map[ny][nx]){
+                    dist[ny][nx]=curr.value+map[ny][nx];
+                    pq.offer(new Node(nx,ny,dist[ny][nx]));
+                }
+            }
+        }
 
-	public static void main(String[] args) throws IOException {
-		t = 0;
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		while(true) {
-			n = Integer.parseInt(br.readLine());
-			if(n == 0) break;
-			t++;
-			arr = new int[n][n];
-			move = new int[n][n];
-			q = new PriorityQueue<>((a, b) -> a[2] - b[2]);
+    }
 
-			
-			for(int i = 0; i <n; i++) {
-				StringTokenizer st = new StringTokenizer(br.readLine());
-				for(int j = 0; j<n; j++) {
-					arr[i][j] = Integer.parseInt(st.nextToken());
-				}
-			}
-			
-			for(int i = 0; i <n; i++) {
-				Arrays.fill(move[i], Integer.MAX_VALUE);
-			}
-			
-			q.add(new int[] {0,0,arr[0][0]});
-			move[0][0] = arr[0][0];
-			cost = bfs();
-			System.out.println("Problem"+" "+t+":"+" "+cost);
-			
-			
-			
-		}
+    public static boolean isValid(int x, int y) {
+        return x >= 0 && x <N && y >= 0 && y < N;
+    }
+    static class Node implements Comparable<Node> {
+        int x,y, value;
+        Node(int x, int y, int value) {
+            this.x = x; this.y =y; this.value=value;
+        }
 
-	}
-
-	private static int bfs() {
-		while(!q.isEmpty()) {
-			int cur[] = q.poll();
-			int x = cur[0];
-			int y = cur[1];
-			int cost = cur[2];
-			if(x == n-1 && y == n-1) {
-				return cost;
-			}
-			for(int i = 0; i<4; i++) {
-				int nx = x + dx[i];
-				int ny = y + dy[i];
-				if(!(0<=nx && nx<n && 0<=ny && ny<n)) continue;
-				
-				if(cost+arr[nx][ny] < move[nx][ny]) {
-					move[nx][ny] = cost+arr[nx][ny];
-					q.add(new int[] {nx,ny,cost+arr[nx][ny]});
-				}
-			}
-		}
-		return -1;
-	}
-
+        @Override
+        public int compareTo(Node o) {
+            return Integer.compare(value, o.value);
+        }
+    }
 }
+
+
