@@ -1,5 +1,4 @@
 
-
 import java.io.*;
 import java.util.*;
 
@@ -32,26 +31,26 @@ public class Main {
 
     }
     static int escape(){
-        Queue<int[]> escapeQ=new LinkedList<>();
-        escapeQ.add(new int[]{0,0,1,1});
+        Queue<Node> escapeQ=new ArrayDeque<>();
+        escapeQ.add(new Node(0,0,1,1));
         boolean[][][] visited=new boolean[N][M][2];
-        visited[0][0][0]=true;
+        visited[0][0][1]=true;
         while(!escapeQ.isEmpty()){
-            int[] curr=escapeQ.poll();
-            if(curr[0]==M-1&&curr[1]==N-1){
-                return curr[3];
+            Node curr=escapeQ.poll();
+            if(curr.x==M-1&&curr.y==N-1){
+                return curr.dist;
             }
             for(int d=0;d<4;d++){
-                int x=curr[0]+dx[d];
-                int y=curr[1]+dy[d];
+                int x=curr.x+dx[d];
+                int y=curr.y+dy[d];
                 if(isValid(x,y)){
-                    if(map[y][x]==1&&curr[2]==1&&!visited[y][x][0]) {
-                        escapeQ.add(new int[]{x, y, 0, curr[3] + 1});
-                        visited[y][x][1]=true;
+                    if(map[y][x]==1&&curr.chance==1&&!visited[y][x][0]) {
+                        escapeQ.add(new Node(x, y, 0, curr.dist + 1));
+                        visited[y][x][0]=true;
                     }
-                    if(map[y][x]==0&&!visited[y][x][curr[2]]){
-                        escapeQ.add(new int[] {x,y,curr[2],curr[3]+1});
-                        visited[y][x][curr[2]]=true;
+                    if(map[y][x]==0&&!visited[y][x][curr.chance]){
+                        escapeQ.add(new Node(x,y,curr.chance,curr.dist+1));
+                        visited[y][x][curr.chance]=true;
                     }
                 }
             }
@@ -62,7 +61,12 @@ public class Main {
     public static boolean isValid(int x, int y) {
         return x >= 0 && x <M && y >= 0 && y < N;
     }
-
+    static class Node {
+        int x,y, chance, dist;
+        Node(int x, int y, int chance, int dist) {
+            this.x = x; this.y =y; this.chance = chance; this.dist = dist;
+        }
+    }
 }
 
 
