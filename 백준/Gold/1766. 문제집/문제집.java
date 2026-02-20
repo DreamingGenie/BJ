@@ -1,5 +1,4 @@
 
-
 import java.util.*;
 import java.io.*;
 
@@ -32,6 +31,7 @@ public class Main {
 			solve[B]++;
 		}
 		int count=0;
+		StringBuilder sb=new StringBuilder();
 		
 		while(count<N) {
 			for(int i=1;i<=N;i++) {
@@ -42,7 +42,7 @@ public class Main {
 						solve[sollist[i].get(j)]--;
 						
 					}
-					System.out.print(i+" ");
+					sb.append(i+" ");
 					solved[i]=true;
 					count++;
 					break;
@@ -51,6 +51,7 @@ public class Main {
 			}
 			
 		}
+		System.out.println(sb);
 	}
 
 }
