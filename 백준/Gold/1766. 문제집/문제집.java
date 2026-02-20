@@ -1,4 +1,3 @@
-
 import java.util.*;
 import java.io.*;
 
@@ -32,24 +31,22 @@ public class Main {
 		}
 		int count=0;
 		StringBuilder sb=new StringBuilder();
-		
+		PriorityQueue<Integer> pq=new PriorityQueue<>();
+		for(int i=1;i<=N;i++) {
+			if(solve[i]==0)
+				pq.add(i);
+		}
 		while(count<N) {
-			for(int i=1;i<=N;i++) {
-				if(solved[i])
-					continue;
-				if(solve[i]==0) {
-					for(int j=0;j<sollist[i].size();j++) {
-						solve[sollist[i].get(j)]--;
-						
-					}
-					sb.append(i+" ");
-					solved[i]=true;
-					count++;
-					break;
-				}
-				
+			if(pq.size()==0)
+				break;
+			int curr=pq.poll();
+			for(int j=0;j<sollist[curr].size();j++) {
+				solve[sollist[curr].get(j)]--;
+				if(solve[sollist[curr].get(j)]==0)
+					pq.add(sollist[curr].get(j));
 			}
-			
+			sb.append(curr+" ");
+			count++;
 		}
 		System.out.println(sb);
 	}
