@@ -1,40 +1,56 @@
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Stack;
 
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
 public class Main {
+	static int N;
+	static int M;
+	static ArrayList<Integer>[] sollist; 
+	static int[] solve;
 
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		int n = sc.nextInt(); // 학생 수
-		int m = sc.nextInt(); // 비교 횟수
-		ArrayList<Integer>[] list = new ArrayList[n + 1]; // 그래프
-		for (int i = 1; i <= n; i++)
-			list[i] = new ArrayList<Integer>(); // 그래프 구현
+	public static void main(String[] args) throws IOException {
+		input();
+	}
+	public static void input() throws IOException{
+		BufferedReader br= new BufferedReader(new InputStreamReader(System.in));
+		String[] input=br.readLine().split(" ");
+		N=Integer.parseInt(input[0]);
+		M=Integer.parseInt(input[1]);
+		sollist=new ArrayList[N+1];
+		solve=new int[N+1];
 
-		for (int i = 0; i < m; i++)
-			list[sc.nextInt()].add(sc.nextInt()); // 비교 결과 입력
-
-		int[] in_degree = new int[n + 1]; // 진입 차수 배열
-		for (int i = 1; i <= n; i++) // 각 정점의 진입 차수 구하기
-			for (int j : list[i])
-				in_degree[j]++;
-
-		Stack<Integer> stack = new Stack<>();
-		for (int i = 1; i <= n; i++)
-			if (in_degree[i] == 0) // 진입 차수가 0인 정점 스택에 삽입
-				stack.add(i);
-
-		while (!stack.isEmpty()) {
-			int vertex = stack.pop();
-			System.out.print(vertex + " "); // 출력
-			
-			for (int i : list[vertex]) {
-				in_degree[i]--; // 이어진 정점의 진입 차수 줄이기
-				if (in_degree[i] == 0) // 만약 진입 차수가 0이 되었다면
-					stack.push(i); // 스택에 진입 차수가 0이 된 정점 삽입
-			}
+		for(int i=0;i<N+1;i++) {
+			sollist[i]=new ArrayList<>();
 		}
+		for(int i=0;i<M;i++) {
+			StringTokenizer st=new StringTokenizer(br.readLine());
+			int A=Integer.parseInt(st.nextToken());
+			int B=Integer.parseInt(st.nextToken());
+			sollist[A].add(B);
+			solve[B]++;
+		}
+		int count=0;
+		StringBuilder sb=new StringBuilder();
+		PriorityQueue<Integer> pq=new PriorityQueue<>();
+		for(int i=1;i<=N;i++) {
+			if(solve[i]==0)
+				pq.add(i);
+		}
+		while(count<N) {
+			if(pq.size()==0)
+				break;
+			int curr=pq.poll();
+			for(int j=0;j<sollist[curr].size();j++) {
+				solve[sollist[curr].get(j)]--;
+				if(solve[sollist[curr].get(j)]==0)
+					pq.add(sollist[curr].get(j));
+			}
+			sb.append(curr+" ");
+			count++;
+		}
+		System.out.println(sb);
 	}
 
 }
