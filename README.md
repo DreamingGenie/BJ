@@ -1,6 +1,7 @@
 # BJ (Baekjoon Solutions)
 
 [![Solved.ac Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=yusengha)](https://solved.ac/yusengha/)
+<img width="357" height="180" alt="image" src="https://github.com/user-attachments/assets/446a050a-c9d2-4842-a3c9-dc9e7dc2e366" />
 
 백준 온라인 저지(Baekjoon Online Judge)에서 해결한 문제들의 **정답 코드 아카이브 레포지토리**입니다.  
 문제 풀이 기록을 체계적으로 관리하고, 학습 이력을 남기기 위해 운영하고 있습니다.
